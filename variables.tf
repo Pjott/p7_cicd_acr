@@ -13,3 +13,12 @@ variable "cluster_name" {
 variable "kubernetes_vm_size" {
   type = string
 }
+
+variable "acr_name" {
+  type = string
+}
+
+variable "aks_principal_id" {
+  type = string
+  description = "Principal ID for AcrPull"
+}
