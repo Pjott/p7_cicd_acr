@@ -1,4 +1,4 @@
-name: First test
+name: Build AKS
 
 on:
   workflow_dispatch:
