@@ -1,0 +1,33 @@
+name: Build and Push to ACR
+
+on:
+  workflow_dispatch:
+
+env:
+  ACR_NAME: "acr0pr0j7xoxobvb"
+  ACR_LOGIN_SERVER: "acr0pr0j7xoxobvb.azurecr.io"
+  IMAGE_NAME: "simple-nginx-app-test"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to ACR
+        run: |
+          az acr login --name ${{ env.ACR_NAME }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ./app
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
